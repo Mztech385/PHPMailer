@@ -1,0 +1,36 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Path to PHPMailer autoload
+
+// Create instance of PHPMailer
+$mail = new PHPMailer(true);
+
+try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';  // Specify main SMTP server
+    $mail->SMTPAuth = true;
+    $mail->Username = 'your-email@gmail.com';  // Your email address
+    $mail->Password = 'your-email-password';   // Your email password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    // Recipients
+    $mail->setFrom('your-email@gmail.com', 'Your Name');
+    $mail->addAddress('recipient-email@example.com');  // Recipient's email address
+
+    // Content
+    $verificationCode = rand(100000, 999999);  // Generate random 6-digit code
+    $mail->isHTML(true);
+    $mail->Subject = 'Your Verification Code';
+    $mail->Body    = "Here is your verification code: <b>$verificationCode</b>";
+
+    // Send the email
+    $mail->send();
+    echo 'Verification code sent!';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+?>
